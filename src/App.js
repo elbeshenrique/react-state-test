@@ -1,25 +1,35 @@
 import logo from './logo.svg';
 import './App.css';
+import React, { lazy, Suspense } from 'react';
+import { observer } from 'mobx-react-lite';
+import { Store } from 'store/mobx-store';
+// eslint-disable-next-line
+const Component = lazy(() => import('./Component.js'));
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
-}
+const store = Store.instance;
+store.loadData();
+
+const App = observer(props => {
+    const click = () => store.increment();
+    const loadData = () => store.loadData();
+    const alterar = () => store.alterar();
+
+    return (
+        <div className="App">
+            <header className="App-header">
+                <img src={logo} className="App-logo" alt="logo" />
+                <div>
+                    {store.count}<br />
+                    <button onClick={click}>Incrementar</button>
+                    <button onClick={loadData}>Carregar</button>
+                    <button onClick={alterar}>Alterar</button>
+                    <Suspense fallback={"Loading..."}>
+                        <Component />
+                    </Suspense>
+                </div>
+            </header>
+        </div>
+    );
+});
 
 export default App;
