@@ -2,6 +2,9 @@ import './App.css';
 import { observer } from 'mobx-react-lite';
 import { Store } from './store/mobx-store';
 import { LoadingState, ErrorState, SuccessState } from './states/states';
+import { lazy } from 'react';
+
+const Graphics = lazy(() => import('./Graphics'));
 
 const store = Store.instance;
 
@@ -19,7 +22,9 @@ const Component = observer(props => {
         </div>;
     }
 
-    return stateRendered;
+    return <div>
+        <Graphics text="nelson" />{ stateRendered }
+    </div>;
 });
 
 export default Component;
